@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "uzod"
 description = "Lightweight validation library for (micro)Python"
-version = "1.0.0"
+version = "1.0.1"
 keywords = ["python", "micropython", "validation", "zod"]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -14,6 +14,10 @@ authors = [{ name = "Marc Vilella", email = "mvilella.and@gmail.com" }]
 [project.urls]
 Repository = "https://github.com/markusand/uzod"
 Issues = "https://github.com/markusand/uzod/issues"
+
+[tool.setuptools]
+packages = ["uzod"]
+include-package-data = true
 
 [tool.pylint]
 ignore = ["__pycache__", ".venv"]

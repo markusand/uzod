@@ -1,0 +1,2 @@
+include uzod/__init__.pyi
+include uzod/py.typed
