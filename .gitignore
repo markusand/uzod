@@ -1,0 +1,12 @@
+.DS_Store
+
+.venv
+build
+dist
+
+!.vscode
+
+uzod.egg-info
+__pycache__/
+.pytest_cache
+*.pyc
