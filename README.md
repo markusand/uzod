@@ -16,7 +16,13 @@
 
 ## Installation
 
-Just copy `uzod.py` into your project - it's standalone!
+Install from PyPI:
+
+```bash
+pip install uzod
+```
+
+Or just copy `uzod.py` into your project - it's standalone!
 
 ## Quick Start
 
