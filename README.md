@@ -1,6 +1,11 @@
 # uzod
 
-**uzod** is a lightweight validation library inspired by [zod](https://github.com/colinhacks/zod) for (micro)python that provides runtime type checking and validation with a clean, chainable API.
+A lightweight validation library inspired by [zod](https://github.com/colinhacks/zod) for (micro)python that provides runtime type checking and validation with a clean, chainable API.
+
+![PyPI - Version](https://img.shields.io/pypi/v/uzod)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/markusand/uzod/publish-to-pypi.yml)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/uzod)
+
 
 ## Features
 
