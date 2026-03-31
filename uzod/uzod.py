@@ -6,6 +6,8 @@ chainable API inspired by Zod. It's designed to be lightweight with zero
 dependencies, making it perfect for MicroPython projects and embedded systems.
 """
 
+# pylint: disable=protected-access
+
 _MISSING = object()
 
 
@@ -135,6 +137,23 @@ class Validator:
             raise ValidationError("required")
 
         return self._parse(val)
+
+    def clone(self):
+        """
+        Create an independent copy of this validator.
+
+        Returns a new instance with the same type, modifiers, and refinements,
+        but independent from the original — changes to one won't affect the other.
+
+        Returns:
+            A new validator instance of the same type.
+        """
+        new = object.__new__(self.__class__)
+        new._optional = self._optional
+        new._nullable = self._nullable
+        new._default = self._default
+        new._checks = list(self._checks)
+        return new
 
     def _parse(self, val):
         raise NotImplementedError
@@ -326,6 +345,11 @@ class Literal(Validator):
         super().__init__()
         self._values = values
 
+    def clone(self):
+        new = super().clone()
+        new._values = self._values
+        return new
+
     def _parse(self, val):
         if val not in self._values:
             raise ValidationError(f"expected one of ({', '.join(self._values)}), got {val}")
@@ -382,6 +406,11 @@ class Array(Validator):
         """
         return self.refine(lambda v: len(v) <= length, msg or f"too many items, at most {length}")
 
+    def clone(self):
+        new = super().clone()
+        new._shape = self._shape
+        return new
+
     def _parse(self, val):
         if not isinstance(val, (list, tuple)):
             raise ValidationError(f"expected list, got {type(val).__name__}")
@@ -415,6 +444,12 @@ class Object(Validator):
         super().__init__()
         self._shape = shape
         self._strict = strict
+
+    def clone(self):
+        new = super().clone()
+        new._shape = dict(self._shape)
+        new._strict = self._strict
+        return new
 
     @property
     def strict(self):
@@ -467,6 +502,11 @@ class Union(Validator):
         """
         super().__init__()
         self._schemas = list(schemas)
+
+    def clone(self):
+        new = super().clone()
+        new._schemas = list(self._schemas)
+        return new
 
     def _parse(self, val):
         errors = []

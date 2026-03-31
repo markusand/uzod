@@ -184,3 +184,15 @@ class TestUZodValidator(unittest.TestCase):
         with self.assertRaises(ValidationError) as raised:
             schema.parse(3)
         self.assertEqual("must be even", str(raised.exception))
+
+    def test_clone(self):
+        """should produce independent validators that don't affect each other"""
+        base = z.string().min(3)
+        cloned = base.clone()
+
+        cloned.max(5)
+
+        # base is unaffected by changes to cloned
+        self.assertEqual(base.parse("Hello World"), "Hello World")
+        with self.assertRaises(ValidationError):
+            cloned.parse("Hello World")
