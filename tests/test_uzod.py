@@ -196,3 +196,21 @@ class TestUZodValidator(unittest.TestCase):
         self.assertEqual(base.parse("Hello World"), "Hello World")
         with self.assertRaises(ValidationError):
             cloned.parse("Hello World")
+
+    def test_object_extend(self):
+        """should allow extending an object with new schema attributes"""
+        base = z.object({"id": z.number(), "name": z.string()})
+        with_age = base.extend({"age": z.integer()})
+        with_string_id = base.extend({"id": z.string()})
+        with_constrained_id = base.extend({"id": base.shape["id"].min(10)})
+
+        self.assertEqual(base.parse({"id": 1, "name": "Alice"}), {"id": 1, "name": "Alice"})
+
+        with self.assertRaises(ValidationError):
+            with_age.parse({"id": 1, "name": "Alice"})
+
+        with self.assertRaises(ValidationError):
+            with_string_id.parse({"id": 1, "name": "Alice"})
+
+        with self.assertRaises(ValidationError):
+            with_constrained_id.parse({"id": 1, "name": "Alice"})

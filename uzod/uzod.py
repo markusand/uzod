@@ -465,6 +465,28 @@ class Object(Validator):
         self._strict = True
         return self
 
+    @property
+    def shape(self):
+        """The field schemas defined for this object validator, as independent copies."""
+        return {key: validator.clone() for key, validator in self._shape.items()}
+
+    def extend(self, shape: "dict[str, Validator]") -> "Object":
+        """
+        Return a new Object validator with additional fields merged in.
+
+        The original validator is not modified. Fields in shape override
+        existing fields with the same key.
+
+        Args:
+            shape: Dictionary mapping field names to their validator schemas.
+
+        Returns:
+            A new Object validator with the combined shape.
+        """
+        new = self.clone()
+        new._shape = self._shape | shape
+        return new
+
     def _parse(self, val):
         if not isinstance(val, dict):
             raise ValidationError(f"expected dict, got {type(val).__name__}")
