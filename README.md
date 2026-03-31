@@ -182,6 +182,14 @@ ValidationError: name: expected str, got int
 ValidationError: unexpected keys: b
 ```
 
+## Testing
+
+Run the test suite with:
+
+```bash
+python -m unittest discover tests
+```
+
 ## Contributing
 
 Contributions are welcome! This is a small, focused library - let's keep it that way.
