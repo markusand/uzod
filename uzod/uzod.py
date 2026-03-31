@@ -487,6 +487,21 @@ class Object(Validator):
         new._shape = self._shape | shape
         return new
 
+    def partial(self, keys=None):
+        """
+        Return a new Object validator with some or all fields made optional.
+
+        Args:
+            keys: List of field names to make optional. If omitted, all fields
+                  become optional.
+
+        Returns:
+            A new Object validator with the specified fields marked as optional.
+        """
+        return self.extend(
+            {n: v.optional for n, v in self.shape.items() if keys is None or n in keys}
+        )
+
     def _parse(self, val):
         if not isinstance(val, dict):
             raise ValidationError(f"expected dict, got {type(val).__name__}")

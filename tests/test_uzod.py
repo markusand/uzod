@@ -214,3 +214,15 @@ class TestUZodValidator(unittest.TestCase):
 
         with self.assertRaises(ValidationError):
             with_constrained_id.parse({"id": 1, "name": "Alice"})
+
+    def test_object_partial(self):
+        """should make all or selected fields optional"""
+        base = z.object({"id": z.number(), "name": z.string()})
+        all_optional = base.partial()
+        some_optional = base.partial(["name"])
+
+        self.assertEqual(all_optional.parse({}), {"id": None, "name": None})
+
+        self.assertEqual(some_optional.parse({"id": 1}), {"id": 1, "name": None})
+        with self.assertRaises(ValidationError):
+            some_optional.parse({"name": "Bob"})
