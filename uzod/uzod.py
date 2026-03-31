@@ -416,6 +416,7 @@ class Object(Validator):
         self._shape = shape
         self._strict = strict
 
+    @property
     def strict(self):
         """
         Enable strict mode to reject unknown keys.
