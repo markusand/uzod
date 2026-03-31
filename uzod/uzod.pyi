@@ -1,5 +1,7 @@
 """Type stubs for uzod schema validator"""
 
+# pylint: disable=unused-argument, redefined-builtin, missing-docstring, super-init-not-called
+
 from typing import (
     Any,
     Callable,
@@ -9,7 +11,6 @@ from typing import (
     Tuple,
     TypeVar,
     Self,
-    overload,
 )
 
 Check = Callable[[Any], bool]
@@ -112,7 +113,7 @@ class Union(Validator[Any]):
     def __init__(self, *schemas: Validator[Any]) -> None: ...
     def _parse(self, val: Any) -> Any: ...
 
-class z:
+class z:  # pylint: disable=invalid-name
     """Shortcuts for common validators"""
 
     string: type[String]
