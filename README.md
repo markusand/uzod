@@ -125,13 +125,13 @@ z.union(z.literal("yes", "no"), z.boolean())
 #### Optional
 
 ```python
-# Field can be omitted (returns None)
+# Field can be omitted
 z.object({
     "name": z.string(),
     "nickname": z.string().optional
 })
 
-# parse({"name": "Alice"}) -> {"name": "Alice", "nickname": None}
+# parse({"name": "Alice"}) -> {"name": "Alice"}
 ```
 
 #### Nullable
