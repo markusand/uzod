@@ -104,7 +104,7 @@ class TestUZodValidator(unittest.TestCase):
         schema = z.object({"name": z.string(), "age": z.integer().optional}, strict=True)
 
         # Valid object passes
-        self.assertEqual(schema.parse({"name": "Alice"}), {"name": "Alice", "age": None})
+        self.assertEqual(schema.parse({"name": "Alice"}), {"name": "Alice"})
 
         # Extra keys are rejected
         with self.assertRaises(ValidationError) as raised:
@@ -142,7 +142,7 @@ class TestUZodValidator(unittest.TestCase):
         schema = z.object({"req": z.string(), "opt": z.string().optional})
 
         # Optional field can be omitted or provided
-        self.assertEqual(schema.parse({"req": "req"}), {"req": "req", "opt": None})
+        self.assertEqual(schema.parse({"req": "req"}), {"req": "req"})
         self.assertEqual(schema.parse({"req": "req", "opt": "opt"}), {"req": "req", "opt": "opt"})
 
         # Required field is must be provided
@@ -156,7 +156,7 @@ class TestUZodValidator(unittest.TestCase):
 
         self.assertEqual(schema.parse({"field": "foo"}), {"field": "foo"})
         self.assertEqual(schema.parse({"field": None}), {"field": None})
-        self.assertEqual(schema.parse({}), {"field": None})
+        self.assertEqual(schema.parse({}), {})
 
     def test_default(self):
         """should use default values when fields are missing or None"""
@@ -221,8 +221,8 @@ class TestUZodValidator(unittest.TestCase):
         all_optional = base.partial()
         some_optional = base.partial(["name"])
 
-        self.assertEqual(all_optional.parse({}), {"id": None, "name": None})
+        self.assertEqual(all_optional.parse({}), {})
 
-        self.assertEqual(some_optional.parse({"id": 1}), {"id": 1, "name": None})
+        self.assertEqual(some_optional.parse({"id": 1}), {"id": 1})
         with self.assertRaises(ValidationError):
             some_optional.parse({"name": "Bob"})

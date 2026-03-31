@@ -515,7 +515,10 @@ class Object(Validator):
         out = {}
         for key, schema in self._shape.items():
             try:
-                out[key] = schema.parse(val.get(key, _MISSING))
+                raw = val.get(key, _MISSING)
+                if raw is _MISSING and schema._optional and schema._default is _MISSING:
+                    continue
+                out[key] = schema.parse(raw)
             except ValidationError as error:
                 raise ValidationError(f"{key}: {error}") from error
         return self._run_checks(out)
