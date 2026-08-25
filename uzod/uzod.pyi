@@ -106,6 +106,18 @@ class Object(Validator[Dict[str, Any]]):
     def partial(self, keys: List[str] | None = None) -> "Object": ...
     def _parse(self, val: Any) -> Dict[str, Any]: ...
 
+K = TypeVar("K")
+V = TypeVar("V")
+
+class Record(Validator[Dict[K, V]]):
+    """Record validator"""
+
+    _key: Validator[K]
+    _value: Validator[V]
+
+    def __init__(self, key: Validator[K], value: Validator[V]) -> None: ...
+    def _parse(self, val: Any) -> Dict[K, V]: ...
+
 class Union(Validator[Any]):
     """Or validator"""
 
@@ -125,4 +137,5 @@ class z:  # pylint: disable=invalid-name
     literal: type[Literal]
     array: type[Array]
     object: type[Object]
+    record: type[Record]
     union: type[Union]

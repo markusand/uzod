@@ -226,3 +226,22 @@ class TestUZodValidator(unittest.TestCase):
         self.assertEqual(some_optional.parse({"id": 1}), {"id": 1})
         with self.assertRaises(ValidationError):
             some_optional.parse({"name": "Bob"})
+
+    def test_record(self):
+        """should validate dictionary with typed keys and values"""
+        schema = z.record(z.string(), z.integer())
+
+        self.assertEqual(schema.parse({"a": 1, "b": 2}), {"a": 1, "b": 2})
+        self.assertEqual(schema.parse({}), {})
+
+        with self.assertRaises(ValidationError) as raised:
+            schema.parse("not a dict")
+        self.assertEqual("expected dict, got str", str(raised.exception))
+
+        with self.assertRaises(ValidationError) as raised:
+            schema.parse({1: 1})
+        self.assertEqual("key 1: expected str, got int", str(raised.exception))
+
+        with self.assertRaises(ValidationError) as raised:
+            schema.parse({"a": "not int"})
+        self.assertEqual("['a']: expected int, got str", str(raised.exception))

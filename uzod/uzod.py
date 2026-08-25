@@ -524,6 +524,41 @@ class Object(Validator):
         return self._run_checks(out)
 
 
+class Record(Validator):
+    """
+    Validator for dictionaries with arbitrary keys and typed values.
+
+    Validates that a value is a dictionary where all keys match the key
+    schema and all values match the value schema.
+    """
+
+    def __init__(self, key, value):
+        super().__init__()
+        self._key = key
+        self._value = value
+
+    def clone(self):
+        new = super().clone()
+        new._key = self._key
+        new._value = self._value
+        return new
+
+    def _parse(self, val):
+        if not isinstance(val, dict):
+            raise ValidationError(f"expected dict, got {type(val).__name__}")
+        out = {}
+        for k, v in val.items():
+            try:
+                key = self._key.parse(k)
+            except ValidationError as error:
+                raise ValidationError(f"key {k!r}: {error}") from error
+            try:
+                out[key] = self._value.parse(v)
+            except ValidationError as error:
+                raise ValidationError(f"[{k!r}]: {error}") from error
+        return self._run_checks(out)
+
+
 class Union(Validator):
     """
     Validator for union/alternative types.
@@ -585,4 +620,5 @@ class z:  # pylint: disable=invalid-name
     literal = Literal
     array = Array
     object = Object
+    record = Record
     union = Union
