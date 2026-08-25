@@ -1,5 +1,5 @@
 """Schema validator"""
 
-from .uzod import ValidationError, z
+from .uzod import ValidationError, z, Validator
 
-__all__ = ["ValidationError", "z"]
+__all__ = ["ValidationError", "z", "Validator"]
