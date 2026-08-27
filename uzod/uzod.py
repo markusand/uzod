@@ -559,6 +559,15 @@ class Record(Validator):
         return self._run_checks(out)
 
 
+class Number(Float):
+    """Validator for numeric values that preserves int vs float type."""
+
+    def _parse(self, val):
+        if not isinstance(val, (int, float)) or isinstance(val, bool):
+            raise ValidationError(f"expected number, got {type(val).__name__}")
+        return self._run_checks(val)
+
+
 class Union(Validator):
     """
     Validator for union/alternative types.
@@ -615,7 +624,7 @@ class z:  # pylint: disable=invalid-name
     string = String
     integer = Integer
     float = Float
-    number = Float
+    number = Number
     boolean = Boolean
     literal = Literal
     array = Array

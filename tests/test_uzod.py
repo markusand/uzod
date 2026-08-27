@@ -245,3 +245,21 @@ class TestUZodValidator(unittest.TestCase):
         with self.assertRaises(ValidationError) as raised:
             schema.parse({"a": "not int"})
         self.assertEqual("['a']: expected int, got str", str(raised.exception))
+
+    def test_number(self):
+        """should validate numeric values preserving int vs float type"""
+        schema = z.number(min=0, max=10)
+
+        self.assertEqual(schema.parse(5), 5)
+        self.assertIsInstance(schema.parse(5), int)
+
+        self.assertEqual(schema.parse(3.14), 3.14)
+        self.assertIsInstance(schema.parse(3.14), float)
+
+        with self.assertRaises(ValidationError) as raised:
+            schema.parse("5")
+        self.assertEqual("expected number, got str", str(raised.exception))
+
+        with self.assertRaises(ValidationError) as raised:
+            schema.parse(-1)
+        self.assertEqual("too small, at least 0", str(raised.exception))

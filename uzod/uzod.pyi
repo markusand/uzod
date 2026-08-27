@@ -118,6 +118,11 @@ class Record(Validator[Dict[K, V]]):
     def __init__(self, key: Validator[K], value: Validator[V]) -> None: ...
     def _parse(self, val: Any) -> Dict[K, V]: ...
 
+class Number(Float):
+    """Number validator that preserves int vs float"""
+
+    def _parse(self, val: Any) -> int | float: ...
+
 class Union(Validator[Any]):
     """Or validator"""
 
@@ -132,7 +137,7 @@ class z:  # pylint: disable=invalid-name
     string: type[String]
     integer: type[Integer]
     float: type[Float]
-    number: type[Float]
+    number: type[Number]
     boolean: type[Boolean]
     literal: type[Literal]
     array: type[Array]
